@@ -97,19 +97,17 @@ export default function CartDrawer() {
                       <strong className="text-white">{item.preparationName}</strong>
                     </div>
 
-                    {item.pieceCut && item.pieceCut !== 'Whole / Live' && (
+                    {item.pieceCut && item.pieceCut !== 'Whole / Live' && item.pieceCut !== 'Standard Food Pack' && item.pieceCut !== 'Standard Pack' && (
                       <div className="flex items-center justify-between">
                         <span className="text-slate-400">Cut Style:</span>
                         <span className="font-bold text-blue-400">{item.pieceCut}</span>
                       </div>
                     )}
 
-                    {item.preparationId !== 'live' && (
+                    {item.keepGizzard && (
                       <div className="flex items-center justify-between">
                         <span className="text-slate-400">Gizzards:</span>
-                        <span className="text-slate-200">
-                          {item.keepGizzard ? 'Cleaned & Packed' : 'Discarded'}
-                        </span>
+                        <span className="text-slate-200">Cleaned & Packed</span>
                       </div>
                     )}
 

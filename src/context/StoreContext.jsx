@@ -5,8 +5,13 @@ import { DELIVERY_ZONES } from '../data/products';
 const StoreContext = createContext();
 
 export function StoreProvider({ children }) {
-  // Navigation View: 'shop' | 'track' | 'upcoming' | 'admin' | 'account'
+  // Navigation View: 'shop' | 'track' | 'admin' | 'account'
   const [currentView, setCurrentView] = useState('shop');
+
+  // Multi-Category Search & Filter State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [quickViewProduct, setQuickViewProduct] = useState(null);
 
   // Modals & Drawers
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -14,7 +19,7 @@ export function StoreProvider({ children }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' | 'signup'
   const [notifyItem, setNotifyItem] = useState(null);
-  const [activePaymentModal, setActivePaymentModal] = useState(null); // { gateway: 'paystack'|'flutterwave', orderData, amount, onComplete }
+  const [activePaymentModal, setActivePaymentModal] = useState(null);
 
   // Customer Authentication State
   const [currentUser, setCurrentUser] = useState(() => {
@@ -96,7 +101,7 @@ export function StoreProvider({ children }) {
     }
   }, [isAdminLoggedIn]);
 
-  // Update active tracked order when trackingId changes or orders change
+  // Update active tracked order
   useEffect(() => {
     if (!trackingId) {
       setActiveTrackedOrder(null);
@@ -109,18 +114,17 @@ export function StoreProvider({ children }) {
     setActiveTrackedOrder(found || null);
   }, [trackingId, orders]);
 
-  // Customer Auth Functions
+  // Customer Auth
   const loginCustomer = (emailOrPhone, password) => {
-    // Demo login simulator
     const namePart = emailOrPhone.split('@')[0];
     const customer = {
       name: namePart ? namePart.charAt(0).toUpperCase() + namePart.slice(1) : 'Valued Customer',
       email: emailOrPhone.includes('@') ? emailOrPhone : `${emailOrPhone}@sajcustomer.com`,
       phone: emailOrPhone.includes('@') ? '0803 123 4567' : emailOrPhone,
-      address: 'Plot 12, Admiralty Way, Lekki Phase 1, Lagos',
-      mandatoryFallback: 'Enyo Filling Station at Lekki Phase 1 Gate',
+      address: '',
+      mandatoryFallback: '',
       state: 'Lagos State',
-      area: 'Lekki Phase 1'
+      area: 'Ikeja'
     };
     setCurrentUser(customer);
     setIsAuthModalOpen(false);
@@ -146,7 +150,7 @@ export function StoreProvider({ children }) {
     setCurrentUser(null);
   };
 
-  // Admin Auth Functions
+  // Admin Auth
   const adminLogin = (passcode) => {
     if (passcode === 'admin123' || passcode === 'sajfarm2026') {
       setIsAdminLoggedIn(true);
@@ -159,11 +163,12 @@ export function StoreProvider({ children }) {
     setIsAdminLoggedIn(false);
   };
 
-  // Cart Operations
+  // Cart Operations: Add Configured Item (Broilers, Custom Livestock)
   const addToCart = (configuredItem) => {
     setCart((prev) => {
       const existingIdx = prev.findIndex(
         (i) =>
+          i.productId === configuredItem.productId &&
           i.tierId === configuredItem.tierId &&
           i.preparationId === configuredItem.preparationId &&
           i.pieceCut === configuredItem.pieceCut &&
@@ -185,6 +190,24 @@ export function StoreProvider({ children }) {
     setIsCartOpen(true);
   };
 
+  // Add Standard Packaged Product to Cart (e.g. Turkey Wings, Eggs, Pork, etc.)
+  const addStandardProductToCart = (product, qty = 1) => {
+    addToCart({
+      productId: product.id,
+      tierId: product.id,
+      tierName: product.name,
+      weightRange: product.unit,
+      avgWeight: 1.0,
+      preparationId: 'standard',
+      preparationName: product.categoryName,
+      pieceCut: 'Standard Pack',
+      keepGizzard: false,
+      customNotes: '',
+      unitPrice: product.price,
+      quantity: qty
+    });
+  };
+
   const removeFromCart = (cartItemId) => {
     setCart((prev) => prev.filter((item) => item.cartItemId !== cartItemId));
   };
@@ -204,7 +227,7 @@ export function StoreProvider({ children }) {
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const cartSubtotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
 
-  // Place Order function (handles both direct & online gateways)
+  // Place Order
   const placeOrder = (checkoutData, paymentDetails = null) => {
     const statePrefix =
       checkoutData.state.includes('Lagos')
@@ -244,7 +267,7 @@ export function StoreProvider({ children }) {
         product: `${c.tierName} (${c.weightRange})`,
         quantity: c.quantity,
         preparation: c.preparationName,
-        pieces: c.preparationId === 'portioned' ? c.pieceCut : 'N/A',
+        pieces: c.pieceCut || 'N/A',
         gizzard: c.keepGizzard,
         pricePerBird: c.unitPrice,
         subtotal: c.unitPrice * c.quantity
@@ -270,38 +293,38 @@ export function StoreProvider({ children }) {
         },
         {
           step: 2,
-          title: 'Farm Coop Selection & Weight Certification',
+          title: 'Farm Selection & Certification',
           time: 'Upcoming',
           completed: false,
-          desc: 'Our farm team selects healthy broilers matching your requested weight.'
+          desc: 'Farm team inspects and prepares items to order specification.'
         },
         {
           step: 3,
-          title: 'Preparation & Custom Processing',
+          title: 'Hygienic Preparation / Abattoir Processing',
           time: 'Upcoming',
           completed: false,
-          desc: 'Slaughtered, defeathered and portioned to specification (or ventilated crates for live birds).'
+          desc: 'Portioned, cleaned, or packaged in certified food-safe crates.'
         },
         {
           step: 4,
-          title: 'Chilled Storage & Van Dispatch',
+          title: 'Chilled Box Packaging & Loading',
           time: 'Upcoming',
           completed: false,
-          desc: 'Packed in insulated boxes and loaded into refrigerated delivery van.'
+          desc: 'Packed in insulated temperature-controlled boxes inside delivery van.'
         },
         {
           step: 5,
           title: 'Out for Delivery (Doorstep / Fallback Landmark)',
           time: 'Upcoming',
           completed: false,
-          desc: 'Van driver en route. Driver contacts you before arrival.'
+          desc: 'Van driver en route. Driver calls before reaching location.'
         },
         {
           step: 6,
           title: 'Delivered',
           time: 'Pending',
           completed: false,
-          desc: 'Handover complete and fresh meat received.'
+          desc: 'Handover complete and fresh order received.'
         }
       ]
     };
@@ -314,7 +337,7 @@ export function StoreProvider({ children }) {
     return newOrderId;
   };
 
-  // Admin function: Update order status along lifecycle
+  // Admin status update
   const updateOrderStatus = (orderId, newStatus) => {
     setOrders((prev) =>
       prev.map((order) => {
@@ -374,6 +397,12 @@ export function StoreProvider({ children }) {
       value={{
         currentView,
         setCurrentView,
+        searchQuery,
+        setSearchQuery,
+        selectedCategory,
+        setSelectedCategory,
+        quickViewProduct,
+        setQuickViewProduct,
         isCartOpen,
         setIsCartOpen,
         isCheckoutOpen,
@@ -395,6 +424,7 @@ export function StoreProvider({ children }) {
         adminLogout,
         cart,
         addToCart,
+        addStandardProductToCart,
         removeFromCart,
         updateQuantity,
         clearCart,

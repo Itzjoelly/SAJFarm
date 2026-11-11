@@ -17,7 +17,7 @@ import {
 import { WEIGHT_TIERS, PREPARATION_OPTIONS, DELIVERY_ZONES } from '../data/products';
 
 export default function BotSupport() {
-  const { orders, setTrackingId, setCurrentView, setIsCartOpen, currentUser } = useStore();
+  const { orders, setTrackingId, setCurrentView, setIsCartOpen, currentUser, setSelectedCategory } = useStore();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -115,11 +115,11 @@ export default function BotSupport() {
       };
     }
 
-    // 7. Upcoming Ram, Cow, Goat, Pig, Frozen Meats
-    if (q.includes('ram') || q.includes('cow') || q.includes('goat') || q.includes('pig') || q.includes('rabbit') || q.includes('frozen') || q.includes('turkey') || q.includes('pork') || q.includes('livestock')) {
+    // 7. Livestock, Ram, Cow, Goat, Pig, Frozen Meats & Eggs
+    if (q.includes('ram') || q.includes('cow') || q.includes('goat') || q.includes('pig') || q.includes('rabbit') || q.includes('frozen') || q.includes('turkey') || q.includes('pork') || q.includes('egg') || q.includes('livestock')) {
       return {
-        text: `🌟 **Upcoming Meats & Livestock:**\n\nWe are launching:\n• **Frozen Meats:** Blast-frozen whole chicken, prime turkey wings/drumsticks, pork chops & ribs.\n• **Farm Livestock:** Balami/Uda Rams (festive bookings), Cattle/Cows, Flemish Giant Rabbits, Boer Goats, and market pigs.\n\nYou can join our priority waitlist right now!`,
-        action: { label: 'View Upcoming Catalog', type: 'nav', value: 'upcoming' }
+        text: `🌟 **Multi-Category Farm Catalog:**\n\nYou can order all of these directly from our store right now:\n\n• **Live Livestock:** Balami Rams (₦185,000+), Fulani Cows (₦480,000+), Boer Goats, and Rabbits (Live or abattoir slaughtered)\n• **Frozen Meats:** Prime Turkey Wings (2kg @ ₦11,500), Pork Chops & Ribs (1.5kg @ ₦8,500)\n• **Daily Farm Eggs:** Fresh Jumbo Eggs (Crate of 30 @ ₦4,200)\n\nAll items dispatched in our refrigerated vans across Lagos, Ogun & Ibadan!`,
+        action: { label: 'Shop Meats & Livestock', type: 'category', value: 'livestock' }
       };
     }
 
@@ -137,7 +137,7 @@ export default function BotSupport() {
 
     // Default fallback
     return {
-      text: `Thank you for your message! At SAJFarm, we rear healthy broilers, price them transparently by weight, and offer custom slaughter/cutting with delivery to Lagos, Ogun, and Ibadan.\n\nCould you specify if you want to know about **prices**, **delivery locations**, **order tracking**, or **butcher options**?`
+      text: `Thank you for contacting SAJFarm! We are a full-scale farm e-commerce platform offering **Fresh Broilers**, **Frozen Turkey & Pork**, **Live Rams, Cows & Goats**, and **Crates of Eggs** across Lagos, Ogun, and Ibadan.\n\nHow can I help you today?`
     };
   };
 
@@ -170,7 +170,13 @@ export default function BotSupport() {
   };
 
   const handleActionClick = (action) => {
-    if (action.type === 'nav') {
+    if (action.type === 'category') {
+      setSelectedCategory(action.value);
+      setCurrentView('shop');
+      setIsOpen(false);
+      const el = document.getElementById('products-catalog');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else if (action.type === 'nav') {
       setCurrentView(action.value);
       setIsOpen(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });

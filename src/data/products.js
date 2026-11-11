@@ -1,3 +1,11 @@
+export const CATEGORIES = [
+  { id: 'all', name: 'All Products', icon: '🛍️' },
+  { id: 'poultry', name: 'Fresh Broilers & Poultry', icon: '🐔' },
+  { id: 'frozen', name: 'Frozen & Chilled Meats', icon: '❄️' },
+  { id: 'livestock', name: 'Live Farm Livestock', icon: '🐑' },
+  { id: 'eggs', name: 'Farm Eggs & Feeds', icon: '🥚' }
+];
+
 export const WEIGHT_TIERS = [
   {
     id: 'tier-1',
@@ -7,7 +15,7 @@ export const WEIGHT_TIERS = [
     maxWeight: 2.0,
     avgWeight: 1.9,
     basePrice: 6500,
-    description: 'Perfect for small family meals, soups, and roasting. Young, tender, and succulent.',
+    description: 'Perfect for small family meals, soups, and roasting. Succulent and tender.',
     popular: false,
     tag: 'Quick Meals'
   },
@@ -19,9 +27,9 @@ export const WEIGHT_TIERS = [
     maxWeight: 2.4,
     avgWeight: 2.25,
     basePrice: 7800,
-    description: 'Our most popular size! High meat-to-bone ratio with firm, juicy breast meat.',
+    description: 'Our top seller! Thick breast meat and juicy drumsticks.',
     popular: true,
-    tag: 'Most Popular'
+    tag: 'Best Seller'
   },
   {
     id: 'tier-3',
@@ -31,7 +39,7 @@ export const WEIGHT_TIERS = [
     maxWeight: 2.8,
     avgWeight: 2.65,
     basePrice: 9200,
-    description: 'Generous portion size ideal for Sunday stew, pepper soup, and family gatherings.',
+    description: 'Generous portions for Sunday stew, pepper soup, and gatherings.',
     popular: false,
     tag: 'Family Value'
   },
@@ -43,7 +51,7 @@ export const WEIGHT_TIERS = [
     maxWeight: 3.4,
     avgWeight: 3.2,
     basePrice: 10800,
-    description: 'Massive, heavy broiler reared to peak maturity. Thick drumsticks and hearty breast cuts.',
+    description: 'Massive, heavy bird reared to peak maturity. Hearty cuts.',
     popular: false,
     tag: 'Heavyweight'
   }
@@ -55,7 +63,7 @@ export const PREPARATION_OPTIONS = [
     name: 'Live Bird (Delivered Alive)',
     shortName: 'Live Bird',
     price: 0,
-    description: 'Bird is weighed, crated in sanitized ventilated boxes, and delivered active to your address.',
+    description: 'Bird is weighed, crated in sanitized ventilated boxes, and delivered active.',
     icon: 'Feather',
     badge: 'No extra charge',
     requiresCutting: false
@@ -65,7 +73,7 @@ export const PREPARATION_OPTIONS = [
     name: 'Kill & Defeather (Whole Cleaned)',
     shortName: 'Dressed Whole',
     price: 500,
-    description: 'Halal slaughtered, hot-water scalded, plucked spotless, singed, gutted, and rinsed with clean treated water.',
+    description: 'Halal slaughtered, scalded, plucked spotless, singed, gutted, and rinsed with clean treated water.',
     icon: 'Flame',
     badge: '+₦500 processing',
     requiresCutting: false
@@ -85,15 +93,233 @@ export const PREPARATION_OPTIONS = [
 export const PIECE_CUT_OPTIONS = [
   { id: '4', label: '4 Large Pieces', detail: 'Quarters (2 Breasts/Wings + 2 Thighs/Legs)' },
   { id: '8', label: '8 Standard Pieces', detail: 'Ideal for standard stew and frying' },
-  { id: '12', label: '12 Medium Pieces', detail: 'Best for party cooking, jollof rice & pepper soup' },
+  { id: '12', label: '12 Medium Pieces', detail: 'Best for party cooking & pepper soup' },
   { id: '16', label: '16 Bite Pieces', detail: 'Small party bites, easy serving for kids' }
+];
+
+export const ALL_PRODUCTS = [
+  // 1. POULTRY & BROILERS
+  {
+    id: 'prod-broiler-custom',
+    name: 'Fresh Farm Broiler (Priced by Weight)',
+    category: 'poultry',
+    categoryName: 'Fresh Broilers & Poultry',
+    price: 7800,
+    originalPrice: 8500,
+    rating: 4.9,
+    reviewsCount: 142,
+    isCustomizable: true,
+    isBroiler: true,
+    badge: 'Flagship Fresh',
+    badgeColor: 'bg-red-600',
+    unit: 'per bird (weight chosen)',
+    image: 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Reared to peak maturity. Choose live bird or halal slaughter, defeathering & portion cutting into 4, 8, 12, or 16 pieces.',
+    features: ['Weight-based pricing', 'Live or Halal butchered', 'Clean spring water wash', 'Same-day van dispatch']
+  },
+  {
+    id: 'prod-chicken-wings',
+    name: 'Premium Chicken Wings Pack (1kg)',
+    category: 'poultry',
+    categoryName: 'Fresh Broilers & Poultry',
+    price: 4500,
+    originalPrice: 5000,
+    rating: 4.8,
+    reviewsCount: 88,
+    isCustomizable: false,
+    badge: 'Hot Deal',
+    badgeColor: 'bg-blue-600',
+    unit: '1kg vacuum pack',
+    image: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Plump, meaty broiler wings trimmed and cleaned. Perfect for grilling, peppered wings, or barbecuing.',
+    features: ['Trimmed tips', 'Vacuum sealed', 'No preservatives']
+  },
+  {
+    id: 'prod-chicken-gizzards',
+    name: 'Cleaned Farm Gizzards & Liver Pack (1kg)',
+    category: 'poultry',
+    categoryName: 'Fresh Broilers & Poultry',
+    price: 3800,
+    originalPrice: 4200,
+    rating: 4.7,
+    reviewsCount: 64,
+    isCustomizable: false,
+    badge: 'Popular',
+    badgeColor: 'bg-slate-800',
+    unit: '1kg pack',
+    image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Degreased, scraped spotless and packed fresh. High-protein gizzards ready for spicy gizdodo and stew.',
+    features: ['Spotless clean', 'Odor-free', 'Deep chilled']
+  },
+
+  // 2. FROZEN & CHILLED MEATS
+  {
+    id: 'prod-frozen-turkey-wings',
+    name: 'Prime Farm Turkey Wings (2kg Pack)',
+    category: 'frozen',
+    categoryName: 'Frozen & Chilled Meats',
+    price: 11500,
+    originalPrice: 12800,
+    rating: 4.9,
+    reviewsCount: 95,
+    isCustomizable: false,
+    badge: 'Best Seller',
+    badgeColor: 'bg-red-600',
+    unit: '2kg vacuum pack',
+    image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Thick, fleshy farm-raised turkey wings. Blast-frozen at -18°C to seal in natural poultry juices and texture.',
+    features: ['Blast frozen at -18°C', 'Fleshy cuts', 'Chilled van delivery']
+  },
+  {
+    id: 'prod-pork-chops',
+    name: 'Grain-Fed Pork Chops & Ribs (1.5kg)',
+    category: 'frozen',
+    categoryName: 'Frozen & Chilled Meats',
+    price: 8500,
+    originalPrice: 9500,
+    rating: 4.8,
+    reviewsCount: 52,
+    isCustomizable: false,
+    badge: 'Farm Fresh',
+    badgeColor: 'bg-blue-600',
+    unit: '1.5kg pack',
+    image: 'https://images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Tender, lean farm pork chops and ribs. Reared with bio-secure feed and processed under strict hygiene conditions.',
+    features: ['Grain-fed pork', 'Lean marbled cuts', 'Chilled packing']
+  },
+  {
+    id: 'prod-frozen-chicken-whole',
+    name: 'Blast-Frozen Dressed Whole Chicken',
+    category: 'frozen',
+    categoryName: 'Frozen & Chilled Meats',
+    price: 7200,
+    originalPrice: 7900,
+    rating: 4.8,
+    reviewsCount: 76,
+    isCustomizable: false,
+    badge: 'Freezer Ready',
+    badgeColor: 'bg-teal-600',
+    unit: '~2.0kg whole bird',
+    image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Halal slaughtered, plucked, gutted, and blast-frozen whole for easy freezer storage and long shelf-life.',
+    features: ['Zero ice glaze deception', '100% net meat weight', 'Sealed pouch']
+  },
+
+  // 3. LIVE FARM LIVESTOCK
+  {
+    id: 'prod-live-ram-balami',
+    name: 'Mature Balami Ram (Heavyweight)',
+    category: 'livestock',
+    categoryName: 'Live Farm Livestock',
+    price: 185000,
+    originalPrice: 200000,
+    rating: 5.0,
+    reviewsCount: 39,
+    isCustomizable: true,
+    isLivestock: true,
+    badge: 'Festive / Ileya',
+    badgeColor: 'bg-red-600',
+    unit: '45kg – 55kg Live Weight',
+    image: 'https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Massive white Balami ram with impressive horns and heavy muscle build. Pre-inspected by veterinary officers.',
+    features: ['Live delivery or abattoir dressed', 'Health certificate', 'Direct farm truck delivery']
+  },
+  {
+    id: 'prod-live-cow-fulani',
+    name: 'Full Grown White Fulani Bull / Cow',
+    category: 'livestock',
+    categoryName: 'Live Farm Livestock',
+    price: 480000,
+    originalPrice: 520000,
+    rating: 4.9,
+    reviewsCount: 28,
+    isCustomizable: true,
+    isLivestock: true,
+    badge: 'Special Order',
+    badgeColor: 'bg-blue-600',
+    unit: '250kg+ Live Weight',
+    image: 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Healthy, grass-fed White Fulani cattle. Ideal for weddings, burials, corporate events, and butchers.',
+    features: ['Vet inspected', 'Weight certified', 'Direct vehicle transit']
+  },
+  {
+    id: 'prod-live-goat-boer',
+    name: 'Meaty Sahel / Boer He-Goat (Asun Grade)',
+    category: 'livestock',
+    categoryName: 'Live Farm Livestock',
+    price: 45000,
+    originalPrice: 50000,
+    rating: 4.8,
+    reviewsCount: 67,
+    isCustomizable: true,
+    isLivestock: true,
+    badge: 'Asun Special',
+    badgeColor: 'bg-red-700',
+    unit: '20kg – 25kg Live Weight',
+    image: 'https://images.unsplash.com/photo-1524024973431-2ad916746881?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Active, disease-free adult goat with thick tender meat. Perfect for spicy party asun and pepper soup.',
+    features: ['Live crated or dressed', 'Vet approved', 'Tender meat texture']
+  },
+  {
+    id: 'prod-meat-rabbits',
+    name: 'Flemish Giant Meat Rabbits (Pair)',
+    category: 'livestock',
+    categoryName: 'Live Farm Livestock',
+    price: 22000,
+    originalPrice: 25000,
+    rating: 4.7,
+    reviewsCount: 31,
+    isCustomizable: false,
+    badge: 'Organic',
+    badgeColor: 'bg-emerald-600',
+    unit: 'Pair (2 live rabbits)',
+    image: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Heart-healthy, low-cholesterol white meat rabbits. Delivered live in secure ventilated crates for rearing or meat.',
+    features: ['High protein white meat', 'Healthy breeding stock', 'Ventilated carrier']
+  },
+
+  // 4. FARM EGGS & POULTRY FEEDS
+  {
+    id: 'prod-crate-eggs-jumbo',
+    name: 'Farm-Fresh Jumbo Table Eggs (Crate of 30)',
+    category: 'eggs',
+    categoryName: 'Farm Eggs & Feeds',
+    price: 4200,
+    originalPrice: 4600,
+    rating: 4.9,
+    reviewsCount: 180,
+    isCustomizable: false,
+    badge: 'Daily Harvest',
+    badgeColor: 'bg-amber-600',
+    unit: 'Crate (30 eggs)',
+    image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'Harvested this morning from healthy layer hens. Thick golden yolks, high calcium shells, and rich in natural vitamins.',
+    features: ['Same-day collected', 'No cracked eggs guarantee', 'Padded transport']
+  },
+  {
+    id: 'prod-poultry-feed-finisher',
+    name: 'SAJ Premium Broiler Finisher Pellet (25kg)',
+    category: 'eggs',
+    categoryName: 'Farm Eggs & Feeds',
+    price: 16500,
+    originalPrice: 18000,
+    rating: 4.8,
+    reviewsCount: 43,
+    isCustomizable: false,
+    badge: 'Farm Proven',
+    badgeColor: 'bg-slate-800',
+    unit: '25kg bag',
+    image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=600&q=80',
+    shortDesc: 'High-energy organic poultry finisher pellets fortified with amino acids, calcium, and probiotics for rapid broiler weight gain.',
+    features: ['20% Crude Protein', 'Optimal feed conversion ratio', 'Dust-free pellets']
+  }
 ];
 
 export const DELIVERY_ZONES = [
   {
     state: 'Lagos State',
     deliveryFee: 2500,
-    estimatedTime: 'Same Day / Next Morning (2 - 4 hours from slaughter)',
+    estimatedTime: 'Same Day / Next Morning (2 - 4 hours from dispatch)',
     areas: [
       'Ikeja (GRA, Allen, Alausa, Opebi)',
       'Lekki (Phase 1, Agungi, Chevron, Ikate)',
@@ -132,80 +358,5 @@ export const DELIVERY_ZONES = [
       'UI & Samonda Axis',
       'Dugbe & Mokola'
     ]
-  }
-];
-
-export const UPCOMING_SERVICES = [
-  {
-    id: 'frozen-chicken',
-    category: 'Frozen Meats',
-    name: 'Blast-Frozen Whole Chicken & Cuts',
-    description: 'Hygienically slaughtered, vacuum-sealed and blast-frozen at -18°C for extended freezer storage.',
-    image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=600&q=80',
-    status: 'Coming Soon',
-    launchDate: 'Next Month'
-  },
-  {
-    id: 'frozen-turkey',
-    category: 'Frozen Meats',
-    name: 'Prime Farm Turkey (Wings & Drumsticks)',
-    description: 'Plump, meaty farm turkey portions with deep rich poultry flavor, thoroughly cleaned and blast-frozen.',
-    image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=600&q=80',
-    status: 'Coming Soon',
-    launchDate: 'Coming Soon'
-  },
-  {
-    id: 'pork-cuts',
-    category: 'Frozen Meats',
-    name: 'Fresh Farm Pork Chops & Ribs',
-    description: 'Grain-fed, lean and tender pork ribs, belly strips, and chops, processed under strict hygiene conditions.',
-    image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=600&q=80',
-    status: 'Coming Soon',
-    launchDate: 'Coming Soon'
-  },
-  {
-    id: 'live-ram',
-    category: 'Farm Livestock',
-    name: 'Mature Balami & Uda Rams',
-    description: 'Healthy, massive rams for celebrations, Ileya festivities, weddings, and family events. Direct farm weight.',
-    image: 'https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=600&q=80',
-    status: 'Pre-Order / Booking Open',
-    launchDate: 'Available for Bookings'
-  },
-  {
-    id: 'live-cow',
-    category: 'Farm Livestock',
-    name: 'Full Grown Cattle (White Fulani & Sokoto Gudali)',
-    description: 'Premium organic grass-fed cows. Pre-inspected by veterinary officers with live weight guarantee.',
-    image: 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=600&q=80',
-    status: 'Pre-Order Open',
-    launchDate: 'Available for Bookings'
-  },
-  {
-    id: 'farm-goats',
-    category: 'Farm Livestock',
-    name: 'Healthy She-Goats & He-Goats (Boer & Sahel)',
-    description: 'Meaty, disease-free goats for asun, pepper soup, parties, and breeding purposes.',
-    image: 'https://images.unsplash.com/photo-1524024973431-2ad916746881?auto=format&fit=crop&w=600&q=80',
-    status: 'Coming Soon',
-    launchDate: 'Coming Soon'
-  },
-  {
-    id: 'meat-rabbits',
-    category: 'Farm Livestock',
-    name: 'Flemish Giant & New Zealand Meat Rabbits',
-    description: 'Lean, heart-healthy white meat rabbits reared under strict bio-security controls.',
-    image: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=600&q=80',
-    status: 'Coming Soon',
-    launchDate: 'Coming Soon'
-  },
-  {
-    id: 'piggery',
-    category: 'Farm Livestock',
-    name: 'Market Pigs & Growers (Large White)',
-    description: 'Fast-growing, well-nourished healthy market pigs for meat processors and commercial butchers.',
-    image: 'https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80',
-    status: 'Coming Soon',
-    launchDate: 'Coming Soon'
   }
 ];

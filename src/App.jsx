@@ -2,11 +2,11 @@ import React from 'react';
 import { StoreProvider, useStore } from './context/StoreContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import BroilerConfigurator from './components/BroilerConfigurator';
-import UpcomingShowroom from './components/UpcomingShowroom';
+import ProductCatalog from './components/ProductCatalog';
 import WhySAJFarm from './components/WhySAJFarm';
 import OrderTracker from './components/OrderTracker';
 import AdminDashboard from './components/AdminDashboard';
+import ProductDetailModal from './components/ProductDetailModal';
 import CartDrawer from './components/CartDrawer';
 import CheckoutModal from './components/CheckoutModal';
 import CustomerAuthModal from './components/CustomerAuthModal';
@@ -24,17 +24,9 @@ function MainContent() {
         {currentView === 'shop' && (
           <>
             <Hero />
-            <BroilerConfigurator />
-            <UpcomingShowroom />
+            <ProductCatalog />
             <WhySAJFarm />
           </>
-        )}
-
-        {currentView === 'upcoming' && (
-          <div className="pt-4">
-            <UpcomingShowroom />
-            <WhySAJFarm />
-          </div>
         )}
 
         {currentView === 'track' && (
@@ -48,7 +40,8 @@ function MainContent() {
 
       <Footer />
 
-      {/* Global Modals & Bot Assistant */}
+      {/* Global E-Commerce Modals */}
+      <ProductDetailModal />
       <CartDrawer />
       <CheckoutModal />
       <CustomerAuthModal />
