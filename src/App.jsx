@@ -16,7 +16,19 @@ import BotSupport from './components/BotSupport';
 import Footer from './components/Footer';
 
 function MainContent() {
-  const { currentView } = useStore();
+  const { currentView, setCurrentView } = useStore();
+
+  React.useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'admin' || hash === 'track' || hash === 'shop') {
+        setCurrentView(hash);
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, [setCurrentView]);
 
   return (
     <main className="min-h-screen flex flex-col justify-between bg-slate-950 text-white">

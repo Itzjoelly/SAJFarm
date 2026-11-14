@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { INITIAL_MOCK_ORDERS } from '../data/ordersMock';
 import { DELIVERY_ZONES } from '../data/products';
+import {
+  isSupabaseConfigured,
+  dbFetchOrders,
+  dbInsertOrder,
+  dbUpdateOrderStatus,
+  dbRegisterCustomer,
+  dbLoginCustomer
+} from '../lib/supabase';
 
 const StoreContext = createContext();
 
@@ -114,24 +122,123 @@ export function StoreProvider({ children }) {
     setActiveTrackedOrder(found || null);
   }, [trackingId, orders]);
 
-  // Customer Auth
-  const loginCustomer = (emailOrPhone, password) => {
-    const namePart = emailOrPhone.split('@')[0];
-    const customer = {
-      name: namePart ? namePart.charAt(0).toUpperCase() + namePart.slice(1) : 'Valued Customer',
-      email: emailOrPhone.includes('@') ? emailOrPhone : `${emailOrPhone}@sajcustomer.com`,
-      phone: emailOrPhone.includes('@') ? '0803 123 4567' : emailOrPhone,
-      address: '',
-      mandatoryFallback: '',
-      state: 'Lagos State',
-      area: 'Ikeja'
-    };
-    setCurrentUser(customer);
-    setIsAuthModalOpen(false);
-    return customer;
+  // Supabase initial orders sync
+  useEffect(() => {
+    if (isSupabaseConfigured()) {
+      dbFetchOrders().then((data) => {
+        if (data && data.length > 0) {
+          const formatted = data.map((o) => ({
+            id: o.id,
+            customerName: o.customer_name || o.customerName,
+            phone: o.phone,
+            email: o.email,
+            date: o.date || 'Recent',
+            state: o.state,
+            area: o.area,
+            address: o.address,
+            mandatoryFallback: o.mandatory_fallback || o.mandatoryFallback,
+            vanAccessibility: o.van_accessibility || o.vanAccessibility,
+            items: Array.isArray(o.items) ? o.items : JSON.parse(o.items || '[]'),
+            deliveryFee: Number(o.delivery_fee || o.deliveryFee || 0),
+            totalAmount: Number(o.total_amount || o.totalAmount || 0),
+            paymentMethod: o.payment_method || o.paymentMethod,
+            paymentStatus: o.payment_status || o.paymentStatus,
+            status: o.status,
+            driverName: o.driver_name || o.driverName,
+            driverPhone: o.driver_phone || o.driverPhone,
+            vanPlate: o.van_plate || o.vanPlate,
+            estimatedArrival: o.estimated_arrival || o.estimatedArrival,
+            currentLocation: 'SAJ Farm Holding & Abattoir Facility',
+            timeline: Array.isArray(o.timeline) ? o.timeline : JSON.parse(o.timeline || '[]')
+          }));
+          setOrders(formatted);
+        }
+      });
+    }
+  }, []);
+
+  // Customer Auth (Supabase + Local fallback with password verification)
+  const loginCustomer = async (emailOrPhone, password) => {
+    const cleanId = emailOrPhone.trim();
+
+    // 1. If Supabase configured, attempt remote login
+    if (isSupabaseConfigured()) {
+      const res = await dbLoginCustomer(cleanId, password);
+      if (res && res.error) {
+        return res;
+      }
+      if (res && res.phone) {
+        setCurrentUser(res);
+        setIsAuthModalOpen(false);
+        return { success: true, customer: res };
+      }
+    }
+
+    // 2. Local registered accounts verification
+    let registeredUsers = [];
+    try {
+      registeredUsers = JSON.parse(localStorage.getItem('sajfarm_registered_users') || '[]');
+    } catch {
+      registeredUsers = [];
+    }
+
+    // Demo customer account
+    if (
+      (cleanId.toLowerCase() === 'adebayo.ogunlesi@gmail.com' || cleanId.replace(/\s+/g, '') === '08034567890') &&
+      password === 'password123'
+    ) {
+      const demoUser = {
+        name: 'Chief Adebayo Ogunlesi',
+        email: 'adebayo.ogunlesi@gmail.com',
+        phone: '0803 456 7890',
+        address: 'Plot 14 Admiralty Way, Lekki Phase 1, Lagos',
+        mandatoryFallback: 'Ebeano Supermarket Junction / Lekki Phase 1 Roundabout',
+        state: 'Lagos State',
+        area: 'Lekki Phase 1'
+      };
+      setCurrentUser(demoUser);
+      setIsAuthModalOpen(false);
+      return { success: true, customer: demoUser };
+    }
+
+    // Check matched user
+    const matched = registeredUsers.find(
+      (u) =>
+        (u.email && u.email.toLowerCase() === cleanId.toLowerCase()) ||
+        (u.phone && u.phone.replace(/\s+/g, '') === cleanId.replace(/\s+/g, ''))
+    );
+
+    if (matched) {
+      if (matched.password && matched.password !== password) {
+        return { error: 'Incorrect password. Please verify and try again.' };
+      }
+      setCurrentUser(matched);
+      setIsAuthModalOpen(false);
+      return { success: true, customer: matched };
+    }
+
+    return { error: 'Account not found with this email or phone. Please create an account below.' };
   };
 
-  const signupCustomer = (userData) => {
+  const signupCustomer = async (userData) => {
+    let registeredUsers = [];
+    try {
+      registeredUsers = JSON.parse(localStorage.getItem('sajfarm_registered_users') || '[]');
+    } catch {
+      registeredUsers = [];
+    }
+
+    const cleanPhone = userData.phone.replace(/\s+/g, '');
+    const conflict = registeredUsers.find(
+      (u) =>
+        (u.phone && u.phone.replace(/\s+/g, '') === cleanPhone) ||
+        (u.email && userData.email && u.email.toLowerCase() === userData.email.toLowerCase())
+    );
+
+    if (conflict) {
+      return { error: 'An account with this phone number or email already exists. Please sign in.' };
+    }
+
     const customer = {
       name: userData.name,
       email: userData.email,
@@ -141,9 +248,22 @@ export function StoreProvider({ children }) {
       state: userData.state || 'Lagos State',
       area: userData.area || 'Ikeja'
     };
+
+    // Save with password locally
+    registeredUsers.push({
+      ...customer,
+      password: userData.password
+    });
+    localStorage.setItem('sajfarm_registered_users', JSON.stringify(registeredUsers));
+
+    // Also persist to Supabase if configured
+    if (isSupabaseConfigured()) {
+      await dbRegisterCustomer(userData);
+    }
+
     setCurrentUser(customer);
     setIsAuthModalOpen(false);
-    return customer;
+    return { success: true, customer };
   };
 
   const logoutCustomer = () => {
@@ -334,6 +454,11 @@ export function StoreProvider({ children }) {
     setIsCheckoutOpen(false);
     setTrackingId(newOrderId);
     setCurrentView('track');
+
+    if (isSupabaseConfigured()) {
+      dbInsertOrder(newOrder);
+    }
+
     return newOrderId;
   };
 
@@ -381,6 +506,10 @@ export function StoreProvider({ children }) {
             completed: true,
             current: false
           }));
+        }
+
+        if (isSupabaseConfigured()) {
+          dbUpdateOrderStatus(orderId, newStatus, updatedTimeline);
         }
 
         return {
@@ -435,7 +564,8 @@ export function StoreProvider({ children }) {
         setTrackingId,
         activeTrackedOrder,
         placeOrder,
-        updateOrderStatus
+        updateOrderStatus,
+        isSupabaseConfigured: isSupabaseConfigured()
       }}
     >
       {children}

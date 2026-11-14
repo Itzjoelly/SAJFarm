@@ -24,6 +24,8 @@ export default function CustomerAuthModal() {
   const [name, setName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPhone, setSignupPhone] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
   const [state, setState] = useState('Lagos State');
   const [area, setArea] = useState('Ikeja');
   const [address, setAddress] = useState('');
@@ -32,36 +34,59 @@ export default function CustomerAuthModal() {
 
   if (!isAuthModalOpen) return null;
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (!emailOrPhone.trim()) {
-      setError('Please enter your email or phone number');
+      setError('Please enter your email or Nigerian phone number');
+      return;
+    }
+    if (!password) {
+      setError('Please enter your account password');
       return;
     }
     setError('');
-    loginCustomer(emailOrPhone, password);
+    const res = await loginCustomer(emailOrPhone, password);
+    if (res && res.error) {
+      setError(res.error);
+    }
   };
 
   const handleQuickDemoLogin = () => {
     loginCustomer('adebayo.ogunlesi@gmail.com', 'password123');
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     if (!name.trim() || !signupPhone.trim()) {
-      setError('Name and Phone Number are required');
+      setError('Full Name and Phone Number are required');
+      return;
+    }
+    if (!signupPassword) {
+      setError('Please choose a password for your account');
+      return;
+    }
+    if (signupPassword.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+    if (signupPassword !== signupConfirmPassword) {
+      setError('Passwords do not match. Please re-enter your password');
       return;
     }
     setError('');
-    signupCustomer({
+    const res = await signupCustomer({
       name,
-      email: signupEmail || `${signupPhone}@sajfarm.com`,
+      email: signupEmail || `${signupPhone.replace(/\s+/g, '')}@sajfarm.com`,
       phone: signupPhone,
+      password: signupPassword,
       state,
       area,
       address,
       mandatoryFallback: fallback
     });
+    if (res && res.error) {
+      setError(res.error);
+    }
   };
 
   const userOrders = currentUser
@@ -324,7 +349,7 @@ export default function CustomerAuthModal() {
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Email Address
+                    Email Address <span className="text-slate-500 font-normal">(Optional)</span>
                   </label>
                   <input
                     type="email"
@@ -334,6 +359,45 @@ export default function CustomerAuthModal() {
                     className="w-full text-xs px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-hidden focus:border-blue-500"
                   />
                 </div>
+
+                {/* Password and Confirm Password */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                      <Lock className="w-3 h-3 text-red-500" />
+                      <span>Password *</span>
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={signupPassword}
+                      onChange={(e) => setSignupPassword(e.target.value)}
+                      placeholder="At least 6 chars"
+                      className="w-full text-xs px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-hidden focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                      <Lock className="w-3 h-3 text-blue-500" />
+                      <span>Confirm Password *</span>
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={signupConfirmPassword}
+                      onChange={(e) => setSignupConfirmPassword(e.target.value)}
+                      placeholder="Re-enter password"
+                      className={`w-full text-xs px-3.5 py-2 rounded-xl bg-slate-950 border text-white focus:outline-hidden ${
+                        signupConfirmPassword && signupPassword !== signupConfirmPassword
+                          ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
+                          : 'border-slate-800 focus:border-blue-500'
+                      }`}
+                    />
+                  </div>
+                </div>
+                {signupConfirmPassword && signupPassword !== signupConfirmPassword && (
+                  <p className="text-[11px] text-red-400 font-medium">⚠️ Passwords do not match</p>
+                )}
 
                 <div className="pt-1 border-t border-slate-800">
                   <div className="flex items-center justify-between mb-1">

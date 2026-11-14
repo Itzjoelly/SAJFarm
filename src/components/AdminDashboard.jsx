@@ -14,7 +14,12 @@ import {
   AlertTriangle,
   ChevronRight,
   Flame,
-  CheckCircle2
+  CheckCircle2,
+  Database,
+  Copy,
+  Check,
+  ExternalLink,
+  X
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -25,13 +30,16 @@ export default function AdminDashboard() {
     setCurrentView,
     isAdminLoggedIn,
     adminLogin,
-    adminLogout
+    adminLogout,
+    isSupabaseConfigured
   } = useStore();
 
   const [passcodeInput, setPasscodeInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [filterState, setFilterState] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showDbModal, setShowDbModal] = useState(false);
+  const [copiedSql, setCopiedSql] = useState(false);
 
   const handleAdminAuth = (e) => {
     e.preventDefault();
@@ -139,10 +147,25 @@ export default function AdminDashboard() {
         {/* Top Header */}
         <div className="bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-950/80 text-red-400 border border-red-800">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>SAJFarm Central Dispatch Headquarters</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-950/80 text-red-400 border border-red-800">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>SAJFarm Central Dispatch Headquarters</span>
+              </div>
+
+              {isSupabaseConfigured ? (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Supabase Live DB Connected</span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-950/80 text-amber-400 border border-amber-800">
+                  <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span>Supabase: Local Demo Mode (Keys needed in .env)</span>
+                </div>
+              )}
             </div>
+
             <h2 className="text-2xl sm:text-3xl font-black text-white mt-2 tracking-tight">
               Farm Management & Order Dispatch Console
             </h2>
@@ -151,12 +174,19 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => setShowDbModal(true)}
+              className="px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-blue-400 border border-blue-900/50 text-xs font-bold transition-colors flex items-center gap-1.5"
+            >
+              <Database className="w-3.5 h-3.5" />
+              <span>Supabase Setup</span>
+            </button>
             <button
               onClick={() => setCurrentView('shop')}
               className="px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-bold transition-colors"
             >
-              View Customer Storefront
+              View Storefront
             </button>
             <button
               onClick={adminLogout}
@@ -342,6 +372,105 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* SUPABASE SETUP & SQL SCHEMA MODAL */}
+      {showDbModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto text-white">
+          <div
+            onClick={() => setShowDbModal(false)}
+            className="fixed inset-0 bg-black/85 backdrop-blur-sm"
+          ></div>
+
+          <div className="min-h-full flex items-center justify-center p-4 relative">
+            <div className="relative bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full shadow-2xl overflow-hidden my-8 p-6 space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-blue-600 flex items-center justify-center text-white">
+                    <Database className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-white">Supabase Cloud Database Setup</h3>
+                    <p className="text-xs text-slate-400">PostgreSQL tables, orders persistence & RLS policies</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowDbModal(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Status indicator */}
+              <div className={`p-4 rounded-2xl border text-xs flex items-center justify-between ${
+                isSupabaseConfigured
+                  ? 'bg-emerald-950/40 border-emerald-800 text-emerald-300'
+                  : 'bg-amber-950/40 border-amber-800 text-amber-300'
+              }`}>
+                <div className="flex items-center gap-2">
+                  <span className={`w-2.5 h-2.5 rounded-full ${isSupabaseConfigured ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'}`}></span>
+                  <span className="font-bold">
+                    {isSupabaseConfigured
+                      ? 'Supabase is Live & Connected to SAJFarm!'
+                      : 'Supabase credentials not yet detected in .env'}
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono opacity-80">
+                  {isSupabaseConfigured ? 'Production Live' : 'Demo LocalStorage'}
+                </span>
+              </div>
+
+              {/* Step by Step instructions */}
+              <div className="space-y-3 text-xs text-slate-300">
+                <div className="font-bold text-white text-sm">3 Quick Steps to Link Your Supabase Project:</div>
+
+                <div className="space-y-2.5">
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-red-600 text-white font-bold flex items-center justify-center shrink-0 text-[11px]">1</span>
+                    <div>
+                      <strong className="text-white">Run SQL Schema:</strong> Open your Supabase Dashboard &rarr; <strong>SQL Editor</strong> &rarr; Click <strong>New Query</strong>, paste the content of <code className="text-blue-400 font-mono">supabase_schema.sql</code>, and click <strong>Run</strong>.
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 text-[11px]">2</span>
+                    <div>
+                      <strong className="text-white">Copy API Credentials:</strong> Go to <strong>Project Settings &rarr; API</strong> in Supabase, and copy your <code className="text-blue-400 font-mono">Project URL</code> and <code className="text-blue-400 font-mono">anon (public) key</code>.
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center shrink-0 text-[11px]">3</span>
+                    <div>
+                      <strong className="text-white">Add to .env:</strong> Paste into your <code className="text-emerald-400 font-mono">.env</code> file:
+                      <pre className="mt-1.5 p-2 rounded-lg bg-black text-[11px] font-mono text-slate-300 overflow-x-auto border border-slate-800">
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key</pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Schema copy button */}
+              <div className="pt-2 flex items-center justify-between">
+                <span className="text-[11px] text-slate-500">
+                  File location: <code className="text-slate-400">c:\Users\SAJ\SAJFarm\supabase_schema.sql</code>
+                </span>
+                <button
+                  onClick={() => {
+                    setCopiedSql(true);
+                    setTimeout(() => setCopiedSql(false), 2000);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-1.5"
+                >
+                  {copiedSql ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedSql ? 'Schema Ready in Project' : 'Schema File Created'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

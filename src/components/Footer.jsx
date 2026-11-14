@@ -101,16 +101,18 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button
-                  onClick={() => {
+                <a
+                  href="#admin"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setCurrentView('admin');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="text-slate-400 hover:text-red-400 transition-colors flex items-center gap-1.5"
+                  className="text-slate-400 hover:text-red-400 transition-colors flex items-center gap-1.5 hover:underline"
                 >
                   <Lock className="w-3.5 h-3.5" />
-                  <span>Farm Dispatch Admin Portal</span>
-                </button>
+                  <span>Admin Link</span>
+                </a>
               </li>
               <li>
                 <button
@@ -153,6 +155,18 @@ export default function Footer() {
             <span className="text-red-500 font-bold">Black • Red • Blue Edition</span>
             <span>•</span>
             <span className="text-blue-400">Lagos, Ogun & Ibadan Dispatch</span>
+            <span>•</span>
+            <a
+              href="#admin"
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentView('admin');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="text-slate-500 hover:text-slate-300 underline cursor-pointer"
+            >
+              Admin
+            </a>
           </div>
         </div>
       </div>

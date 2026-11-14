@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { X, Bell, CheckCircle2, Sparkles } from 'lucide-react';
+import { dbSaveWaitlistEntry } from '../lib/supabase';
 
 export default function NotifyModal() {
   const { notifyItem, setNotifyItem } = useStore();
@@ -15,6 +16,15 @@ export default function NotifyModal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) return;
+
+    dbSaveWaitlistEntry({
+      productId: notifyItem.id,
+      productName: notifyItem.name,
+      name,
+      phone,
+      state
+    });
+
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);

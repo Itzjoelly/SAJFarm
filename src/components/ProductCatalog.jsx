@@ -10,7 +10,8 @@ import {
   ArrowRight,
   ShieldCheck,
   Truck,
-  CheckCircle2
+  CheckCircle2,
+  Bell
 } from 'lucide-react';
 
 export default function ProductCatalog() {
@@ -20,6 +21,7 @@ export default function ProductCatalog() {
     searchQuery,
     setSearchQuery,
     setQuickViewProduct,
+    setNotifyItem,
     addStandardProductToCart
   } = useStore();
 
@@ -217,23 +219,24 @@ export default function ProductCatalog() {
 
                   {/* Card Bottom Button */}
                   <div className="p-4 sm:p-5 pt-0">
-                    {product.isCustomizable ? (
+                    {product.isAvailableNow ? (
                       <button
                         type="button"
                         onClick={() => handleProductCardClick(product)}
-                        className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-500 hover:to-blue-500 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5 shadow-md shadow-red-950/40"
+                        className="w-full py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-black text-xs transition-all flex items-center justify-center gap-1.5 shadow-xl shadow-red-950/60 active:scale-95"
                       >
-                        <span>{isBroiler ? 'Configure Weight & Cuts' : 'Select Size & Dressing'}</span>
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        <span>Configure Weight & Order</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     ) : (
                       <button
                         type="button"
-                        onClick={() => addStandardProductToCart(product)}
-                        className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-red-600 text-slate-200 hover:text-white border border-slate-800 hover:border-red-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                        onClick={() => setNotifyItem(product)}
+                        className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-blue-400 hover:text-blue-300 border border-slate-800 hover:border-blue-700/80 text-xs font-bold transition-all flex items-center justify-center gap-1.5"
                       >
-                        <ShoppingBag className="w-3.5 h-3.5" />
-                        <span>Add To Basket</span>
+                        <Bell className="w-3.5 h-3.5 text-blue-400" />
+                        <span>Coming Soon • Pre-Book</span>
                       </button>
                     )}
                   </div>

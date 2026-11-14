@@ -286,19 +286,9 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => handleNav('admin')}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-bold transition-colors ${
-                currentView === 'admin'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'text-slate-400 hover:text-red-400'
-              }`}
-            >
-              <Lock className="w-3 h-3 text-red-500" />
-              <span>Admin Portal</span>
-              {isAdminLoggedIn && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>}
-            </button>
+          <div className="hidden lg:flex items-center gap-2 text-[11px] text-slate-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>Temperature-Controlled Van Delivery</span>
           </div>
         </div>
       </div>
@@ -326,13 +316,6 @@ export default function Navbar() {
             >
               <Truck className="w-4 h-4 text-red-500" />
               <span>Track Live Delivery</span>
-            </button>
-            <button
-              onClick={() => handleNav('admin')}
-              className="w-full p-2.5 rounded-xl text-left font-bold text-slate-400 flex items-center gap-2 hover:bg-slate-900"
-            >
-              <Lock className="w-4 h-4 text-red-400" />
-              <span>Admin Management Hub</span>
             </button>
           </div>
         </div>

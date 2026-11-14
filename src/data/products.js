@@ -98,7 +98,7 @@ export const PIECE_CUT_OPTIONS = [
 ];
 
 export const ALL_PRODUCTS = [
-  // 1. POULTRY & BROILERS
+  // 1. POULTRY & BROILERS (FRESH BROILER IS THE ONLY ACTIVE ITEM!)
   {
     id: 'prod-broiler-custom',
     name: 'Fresh Farm Broiler (Priced by Weight)',
@@ -108,14 +108,15 @@ export const ALL_PRODUCTS = [
     originalPrice: 8500,
     rating: 4.9,
     reviewsCount: 142,
+    isAvailableNow: true, // ACTIVE ORDERABLE ITEM
     isCustomizable: true,
     isBroiler: true,
-    badge: 'Flagship Fresh',
+    badge: 'Active • Order Now',
     badgeColor: 'bg-red-600',
-    unit: 'per bird (weight chosen)',
+    unit: 'per bird (weight chosen: 1.8kg – 3.4kg+)',
     image: 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80',
-    shortDesc: 'Reared to peak maturity. Choose live bird or halal slaughter, defeathering & portion cutting into 4, 8, 12, or 16 pieces.',
-    features: ['Weight-based pricing', 'Live or Halal butchered', 'Clean spring water wash', 'Same-day van dispatch']
+    shortDesc: 'Reared to peak maturity on organic feeds. Order live in crates or have us halal-slaughter, defeather, and cut into 4, 8, 12, or 16 pieces for your pot.',
+    features: ['In Stock & Ready for Dispatch', 'Weight-based pricing', 'Live or Halal butchered', 'Same-day van delivery']
   },
   {
     id: 'prod-chicken-wings',
@@ -126,13 +127,14 @@ export const ALL_PRODUCTS = [
     originalPrice: 5000,
     rating: 4.8,
     reviewsCount: 88,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Hot Deal',
-    badgeColor: 'bg-blue-600',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '1kg vacuum pack',
     image: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Plump, meaty broiler wings trimmed and cleaned. Perfect for grilling, peppered wings, or barbecuing.',
-    features: ['Trimmed tips', 'Vacuum sealed', 'No preservatives']
+    features: ['Trimmed tips', 'Vacuum sealed', 'Coming in next batch']
   },
   {
     id: 'prod-chicken-gizzards',
@@ -143,16 +145,17 @@ export const ALL_PRODUCTS = [
     originalPrice: 4200,
     rating: 4.7,
     reviewsCount: 64,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Popular',
-    badgeColor: 'bg-slate-800',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '1kg pack',
     image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Degreased, scraped spotless and packed fresh. High-protein gizzards ready for spicy gizdodo and stew.',
     features: ['Spotless clean', 'Odor-free', 'Deep chilled']
   },
 
-  // 2. FROZEN & CHILLED MEATS
+  // 2. FROZEN & CHILLED MEATS (COMING SOON)
   {
     id: 'prod-frozen-turkey-wings',
     name: 'Prime Farm Turkey Wings (2kg Pack)',
@@ -162,9 +165,10 @@ export const ALL_PRODUCTS = [
     originalPrice: 12800,
     rating: 4.9,
     reviewsCount: 95,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Best Seller',
-    badgeColor: 'bg-red-600',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '2kg vacuum pack',
     image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Thick, fleshy farm-raised turkey wings. Blast-frozen at -18°C to seal in natural poultry juices and texture.',
@@ -179,9 +183,10 @@ export const ALL_PRODUCTS = [
     originalPrice: 9500,
     rating: 4.8,
     reviewsCount: 52,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Farm Fresh',
-    badgeColor: 'bg-blue-600',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '1.5kg pack',
     image: 'https://images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Tender, lean farm pork chops and ribs. Reared with bio-secure feed and processed under strict hygiene conditions.',
@@ -196,16 +201,17 @@ export const ALL_PRODUCTS = [
     originalPrice: 7900,
     rating: 4.8,
     reviewsCount: 76,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Freezer Ready',
-    badgeColor: 'bg-teal-600',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '~2.0kg whole bird',
     image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Halal slaughtered, plucked, gutted, and blast-frozen whole for easy freezer storage and long shelf-life.',
     features: ['Zero ice glaze deception', '100% net meat weight', 'Sealed pouch']
   },
 
-  // 3. LIVE FARM LIVESTOCK
+  // 3. LIVE FARM LIVESTOCK (COMING SOON / PRE-ORDER)
   {
     id: 'prod-live-ram-balami',
     name: 'Mature Balami Ram (Heavyweight)',
@@ -215,14 +221,15 @@ export const ALL_PRODUCTS = [
     originalPrice: 200000,
     rating: 5.0,
     reviewsCount: 39,
+    isAvailableNow: false, // COMING SOON / PRE-ORDER
     isCustomizable: true,
     isLivestock: true,
-    badge: 'Festive / Ileya',
-    badgeColor: 'bg-red-600',
+    badge: 'Coming Soon • Pre-Book',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '45kg – 55kg Live Weight',
     image: 'https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Massive white Balami ram with impressive horns and heavy muscle build. Pre-inspected by veterinary officers.',
-    features: ['Live delivery or abattoir dressed', 'Health certificate', 'Direct farm truck delivery']
+    features: ['Live delivery or abattoir dressed', 'Health certificate', 'Available for festive bookings']
   },
   {
     id: 'prod-live-cow-fulani',
@@ -233,10 +240,11 @@ export const ALL_PRODUCTS = [
     originalPrice: 520000,
     rating: 4.9,
     reviewsCount: 28,
+    isAvailableNow: false, // COMING SOON / PRE-ORDER
     isCustomizable: true,
     isLivestock: true,
-    badge: 'Special Order',
-    badgeColor: 'bg-blue-600',
+    badge: 'Coming Soon • Pre-Book',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '250kg+ Live Weight',
     image: 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Healthy, grass-fed White Fulani cattle. Ideal for weddings, burials, corporate events, and butchers.',
@@ -251,10 +259,11 @@ export const ALL_PRODUCTS = [
     originalPrice: 50000,
     rating: 4.8,
     reviewsCount: 67,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: true,
     isLivestock: true,
-    badge: 'Asun Special',
-    badgeColor: 'bg-red-700',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '20kg – 25kg Live Weight',
     image: 'https://images.unsplash.com/photo-1524024973431-2ad916746881?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Active, disease-free adult goat with thick tender meat. Perfect for spicy party asun and pepper soup.',
@@ -269,16 +278,17 @@ export const ALL_PRODUCTS = [
     originalPrice: 25000,
     rating: 4.7,
     reviewsCount: 31,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Organic',
-    badgeColor: 'bg-emerald-600',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: 'Pair (2 live rabbits)',
     image: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'Heart-healthy, low-cholesterol white meat rabbits. Delivered live in secure ventilated crates for rearing or meat.',
     features: ['High protein white meat', 'Healthy breeding stock', 'Ventilated carrier']
   },
 
-  // 4. FARM EGGS & POULTRY FEEDS
+  // 4. FARM EGGS & POULTRY FEEDS (COMING SOON)
   {
     id: 'prod-crate-eggs-jumbo',
     name: 'Farm-Fresh Jumbo Table Eggs (Crate of 30)',
@@ -288,13 +298,14 @@ export const ALL_PRODUCTS = [
     originalPrice: 4600,
     rating: 4.9,
     reviewsCount: 180,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Daily Harvest',
-    badgeColor: 'bg-amber-600',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: 'Crate (30 eggs)',
     image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=600&q=80',
-    shortDesc: 'Harvested this morning from healthy layer hens. Thick golden yolks, high calcium shells, and rich in natural vitamins.',
-    features: ['Same-day collected', 'No cracked eggs guarantee', 'Padded transport']
+    shortDesc: 'Harvested from healthy layer hens. Thick golden yolks, high calcium shells, and rich in natural vitamins.',
+    features: ['Same-day collected', 'No cracked eggs guarantee', 'Coming in next harvest']
   },
   {
     id: 'prod-poultry-feed-finisher',
@@ -305,9 +316,10 @@ export const ALL_PRODUCTS = [
     originalPrice: 18000,
     rating: 4.8,
     reviewsCount: 43,
+    isAvailableNow: false, // COMING SOON
     isCustomizable: false,
-    badge: 'Farm Proven',
-    badgeColor: 'bg-slate-800',
+    badge: 'Coming Soon',
+    badgeColor: 'bg-blue-950 text-blue-400 border border-blue-800',
     unit: '25kg bag',
     image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=600&q=80',
     shortDesc: 'High-energy organic poultry finisher pellets fortified with amino acids, calcium, and probiotics for rapid broiler weight gain.',
