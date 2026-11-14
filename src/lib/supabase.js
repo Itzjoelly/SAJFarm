@@ -145,6 +145,51 @@ export async function dbRegisterCustomer(customerData) {
 }
 
 /**
+ * Fetch all registered customers from Supabase
+ */
+export async function dbFetchCustomers() {
+  if (!isSupabaseConfigured() || !supabase) {
+    try {
+      return JSON.parse(localStorage.getItem('sajfarm_registered_users') || '[]');
+    } catch {
+      return [];
+    }
+  }
+  try {
+    const { data, error } = await supabase
+      .from('customers')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Supabase fetch customers warning:', error.message);
+      return JSON.parse(localStorage.getItem('sajfarm_registered_users') || '[]');
+    }
+    return data || [];
+  } catch (err) {
+    console.warn('Failed to query Supabase customers:', err);
+    return JSON.parse(localStorage.getItem('sajfarm_registered_users') || '[]');
+  }
+}
+
+/**
+ * Fetch all pre-order waitlist records from Supabase
+ */
+export async function dbFetchWaitlist() {
+  if (!isSupabaseConfigured() || !supabase) return [];
+  try {
+    const { data, error } = await supabase
+      .from('waitlist')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) return [];
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Customer Login in Supabase
  */
 export async function dbLoginCustomer(emailOrPhone, password) {
